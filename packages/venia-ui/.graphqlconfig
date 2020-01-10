@@ -1,0 +1,16 @@
+{
+    "projects": {
+        "venia-ui": {
+            "schemaPath": "lastCachedGraphQLSchema.json",
+            "extensions": {
+                "endpoints": {
+                    "default": "https://magento-two-three-four.test/graphql"
+                },
+                "validate-magento-pwa-queries": {
+                    "clients": ["apollo", "literal"],
+                    "filesGlob": "lib/**/*.{js,graphql,gql}"
+                }
+            }
+        }
+    }
+}

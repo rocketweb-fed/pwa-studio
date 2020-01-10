@@ -22,8 +22,10 @@
     "build:ci": " ",
     "build:dev": " ",
     "clean": " ",
+    "download-schema": "graphql get-schema --project venia-ui --insecure",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook:build": "build-storybook -c .storybook -o storybook-dist"
+    "storybook:build": "build-storybook -c .storybook -o storybook-dist",
+    "validate-queries": "yarn run download-schema && graphql validate-magento-pwa-queries --project venia-ui"
   },
   "repository": "github:magento-research/pwa-studio",
   "author": "Magento Commerce",
