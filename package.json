@@ -12,7 +12,8 @@
     "packages/upward-spec",
     "packages/venia-concept",
     "packages/venia-styleguide",
-    "packages/venia-ui"
+    "packages/venia-ui",
+    "packages/rw-storefront"
   ],
   "author": "Magento Commerce",
   "license": "SEE LICENSE IN LICENSE.txt",
@@ -42,7 +43,14 @@
     "validate-queries": "yarn venia run validate-queries",
     "venia": "node ./packages/pwa-buildpack/bin/buildpack load-env ./packages/venia-concept && yarn workspace @magento/venia-concept",
     "watch:all": "node scripts/watch-all.js",
-    "watch:venia": "yarn venia run watch"
+    "watch:venia": "yarn venia run watch",
+    "rw": "yarn workspace @rocketweb/rw-storefront",
+    "build:rw": "yarn rw run build",
+    "watch:rw": "yarn rw run watch",
+    "stage:rw": "yarn rw run start",
+    "stats:rw": "yarn rw run build:analyze && yarn rw run stats",
+    "storybook:rw": "yarn rw run storybook",
+    "test:rw": "yarn rw run test"
   },
   "devDependencies": {
     "@magento/eslint-config": "~1.5.0",
