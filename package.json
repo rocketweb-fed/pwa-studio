@@ -50,7 +50,8 @@
     "stage:rw": "yarn rw run start",
     "stats:rw": "yarn rw run build:analyze && yarn rw run stats",
     "storybook:rw": "yarn rw run storybook",
-    "test:rw": "yarn rw run test"
+    "test:rw": "yarn rw run test",
+    "prettify:rw": "yarn rw run prettier:fix"
   },
   "devDependencies": {
     "@magento/eslint-config": "~1.5.0",
