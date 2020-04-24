@@ -1,8 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
 import { useUserContext } from '../../context/user';
-import { useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useCartContext } from '../../context/cart';
 import { useAwaitQuery } from '../../hooks/useAwaitQuery';
+import { deleteCacheEntry } from '../../Apollo/deleteCacheEntry';
 
 export const useSignIn = props => {
     const {
@@ -14,7 +15,7 @@ export const useSignIn = props => {
         showForgotPassword,
         signInMutation
     } = props;
-
+    const apolloClient = useApolloClient();
     const [isSigningIn, setIsSigningIn] = useState(false);
 
     const [, { createCart, getCartDetails, removeCart }] = useCartContext();
@@ -23,7 +24,9 @@ export const useSignIn = props => {
         { getUserDetails, setToken }
     ] = useUserContext();
 
-    const [signIn, { error: signInError }] = useMutation(signInMutation);
+    const [signIn, { error: signInError }] = useMutation(signInMutation, {
+        fetchPolicy: 'no-cache'
+    });
     const [fetchCartId] = useMutation(createCartMutation);
     const fetchUserDetails = useAwaitQuery(customerQuery);
     const fetchCartDetails = useAwaitQuery(getCartDetailsQuery);
@@ -36,7 +39,8 @@ export const useSignIn = props => {
         errors.push(getDetailsError);
     }
 
-    const formRef = useRef(null);
+    const formApiRef = useRef(null);
+    const setFormApi = useCallback(api => (formApiRef.current = api), []);
 
     const handleSubmit = useCallback(
         async ({ email, password }) => {
@@ -53,9 +57,12 @@ export const useSignIn = props => {
                 await setToken(token);
                 await getUserDetails({ fetchUserDetails });
 
-                // Then remove the old, guest cart and get the cart id from gql.
+                // Then remove the old guest cart and get the cart id from gql.
                 // TODO: This logic may be replacable with mergeCart in 2.3.4
                 await removeCart();
+
+                // Delete stale cart data from apollo
+                await deleteCacheEntry(apolloClient, key => key.match(/^Cart/));
 
                 await createCart({
                     fetchCartId
@@ -71,6 +78,7 @@ export const useSignIn = props => {
             }
         },
         [
+            apolloClient,
             createCart,
             fetchCartDetails,
             fetchCartId,
@@ -84,20 +92,20 @@ export const useSignIn = props => {
     );
 
     const handleForgotPassword = useCallback(() => {
-        const { current: form } = formRef;
+        const { current: formApi } = formApiRef;
 
-        if (form) {
-            setDefaultUsername(form.formApi.getValue('email'));
+        if (formApi) {
+            setDefaultUsername(formApi.getValue('email'));
         }
 
         showForgotPassword();
     }, [setDefaultUsername, showForgotPassword]);
 
     const handleCreateAccount = useCallback(() => {
-        const { current: form } = formRef;
+        const { current: formApi } = formApiRef;
 
-        if (form) {
-            setDefaultUsername(form.formApi.getValue('email'));
+        if (formApi) {
+            setDefaultUsername(formApi.getValue('email'));
         }
 
         showCreateAccount();
@@ -105,10 +113,10 @@ export const useSignIn = props => {
 
     return {
         errors,
-        formRef,
         handleCreateAccount,
         handleForgotPassword,
         handleSubmit,
-        isBusy: isGettingDetails || isSigningIn
+        isBusy: isGettingDetails || isSigningIn,
+        setFormApi
     };
 };

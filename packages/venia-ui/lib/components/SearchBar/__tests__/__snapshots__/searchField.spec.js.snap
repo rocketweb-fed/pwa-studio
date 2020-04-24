@@ -2,6 +2,7 @@
 
 exports[`renders correctly 1`] = `
 <form
+  onKeyDown={[Function]}
   onReset={[Function]}
   onSubmit={[Function]}
 >
@@ -33,6 +34,7 @@ exports[`renders correctly 1`] = `
         className="root"
       >
         <svg
+          className="icon"
           fill="none"
           height={18}
           stroke="currentColor"

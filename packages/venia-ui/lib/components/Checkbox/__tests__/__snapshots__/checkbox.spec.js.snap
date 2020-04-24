@@ -2,15 +2,13 @@
 
 exports[`renders the correct tree 1`] = `
 <form
+  onKeyDown={[Function]}
   onReset={[Function]}
   onSubmit={[Function]}
 >
   <label
     className="root"
   >
-    <span
-      className="icon"
-    />
     <input
       checked={false}
       className="input"
@@ -18,6 +16,9 @@ exports[`renders the correct tree 1`] = `
       onBlur={[Function]}
       onChange={[Function]}
       type="checkbox"
+    />
+    <span
+      className="icon"
     />
     <span
       className="label"

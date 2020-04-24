@@ -10,6 +10,7 @@ import { useUserContext } from '@magento/peregrine/lib/context/user';
 import { useMutation } from '@apollo/react-hooks';
 
 jest.mock('@apollo/react-hooks', () => ({
+    useApolloClient: jest.fn().mockImplementation(() => {}),
     useMutation: jest.fn().mockImplementation(() => [
         jest.fn(),
         {
@@ -17,7 +18,6 @@ jest.mock('@apollo/react-hooks', () => ({
         }
     ])
 }));
-
 jest.mock('../../../classify');
 jest.mock('../../Button', () => () => <i />);
 jest.mock('../../LoadingIndicator', () => () => <i />);
@@ -163,32 +163,5 @@ test('changes view to ForgotPassword', () => {
     });
 
     expect(setDefaultUsername).toHaveBeenCalledTimes(1);
-    expect(showForgotPassword).toHaveBeenCalledTimes(1);
-});
-
-test("avoids reading the form if it doesn't exist", () => {
-    const { setDefaultUsername, showCreateAccount, showForgotPassword } = props;
-    const instance = createTestInstance(<SignIn {...props} />);
-    const { root } = instance;
-
-    const { onClick: createAccount } = root
-        .findByProps({ className: 'createAccountButton' })
-        .findByType(Button).props;
-    const { onClick: forgotPassword } = root
-        .findByProps({ className: 'forgotPasswordButton' })
-        .findByType(Button).props;
-
-    instance.unmount();
-
-    act(() => {
-        createAccount();
-    });
-
-    act(() => {
-        forgotPassword();
-    });
-
-    expect(setDefaultUsername).not.toHaveBeenCalled();
-    expect(showCreateAccount).toHaveBeenCalledTimes(1);
     expect(showForgotPassword).toHaveBeenCalledTimes(1);
 });

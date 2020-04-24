@@ -6,10 +6,13 @@ export const ProductListingFragment = gql`
         items {
             id
             product {
+                id
                 name
+                sku
                 small_image {
                     url
                 }
+                stock_status
             }
             prices {
                 price {
@@ -20,7 +23,9 @@ export const ProductListingFragment = gql`
             quantity
             ... on ConfigurableCartItem {
                 configurable_options {
+                    id
                     option_label
+                    value_id
                     value_label
                 }
             }

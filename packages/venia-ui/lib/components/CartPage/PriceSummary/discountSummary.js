@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import gql from 'graphql-tag';
 import { Price } from '@magento/peregrine';
 
@@ -40,17 +40,16 @@ const DiscountSummary = props => {
     const discount = getDiscount(props.data);
 
     return discount.value ? (
-        <>
+        <Fragment>
             <span className={classes.lineItemLabel}>{'Discounts applied'}</span>
             <span className={classes.price}>
-                {'(-'}
+                {'-'}
                 <Price
                     value={discount.value}
                     currencyCode={discount.currency}
                 />
-                {')'}
             </span>
-        </>
+        </Fragment>
     ) : null;
 };
 
